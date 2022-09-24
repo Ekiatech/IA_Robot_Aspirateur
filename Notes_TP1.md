@@ -1,11 +1,14 @@
 # Notes TP1
 
-.Structures :
+Structures :
 1. carte
-2. robot
-3. capteurs
-4. effecteurs
-5. object
+2. pièce
+3. robot
+4. capteurs
+5. effecteurs
+
+Enum :
+1. objects : rien, poussière, bijou
 
 ## Carte
 
