@@ -14,7 +14,11 @@ void display_map(struct Map *map) {
             }
         }
     }
-    printf("\n-----------------------------------------\n");
+    printf("\n");
+    for (int i = 0; i < map->side_size; i++) {
+        printf("--------");
+    }
+    printf("\n");
 
     for (int i = 0; i < map->side_size; i++) {
         for (int l = 0; l < 3; l++) {
@@ -35,7 +39,10 @@ void display_map(struct Map *map) {
             }
             printf("\n");
         }
-        printf("-----------------------------------------\n");
+        for (int i = 0; i < map->side_size; i++) {
+            printf("--------");
+        }
+        printf("\n");
     }
 
     for (int i = 0; i < map->side_size; i++) {

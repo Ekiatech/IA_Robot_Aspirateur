@@ -5,8 +5,12 @@
 #include "robot.h"
 #include "map.h"
 
+#define DEFAULT_MAP_SIDE_SIZE 5
+
 int main(int argc, char **argv) {
-    int map_side_size = 5;
+    int map_side_size = DEFAULT_MAP_SIDE_SIZE;
+    if (argc >= 2)
+        map_side_size = atoi(argv[1]);
     int robot_points = 0;
     int robot_energy = 100;
     int robot_coordinates[2] = {0, 0};
@@ -27,12 +31,12 @@ int main(int argc, char **argv) {
     display_map(map);
 
     Action current_action;
-    char action_letter[2];
+    char action_letter;
 
     do {
         gen_random_object(map);
         scanf("%s", &action_letter);
-        switch (action_letter[0]) {
+        switch (action_letter) {
             case 'u':
             case 'U':
                 current_action = 0;
