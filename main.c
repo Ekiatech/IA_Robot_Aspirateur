@@ -6,13 +6,16 @@
 #include "map.h"
 
 #define DEFAULT_MAP_SIDE_SIZE 5
+#define DEFAULT_ROBOT_ENERGY 200
 
 int main(int argc, char **argv) {
     int map_side_size = DEFAULT_MAP_SIDE_SIZE;
     if (argc >= 2)
         map_side_size = atoi(argv[1]);
     int robot_points = 0;
-    int robot_energy = 100;
+    int robot_energy = DEFAULT_ROBOT_ENERGY;
+    if (argc >= 3)
+        robot_energy = atoi(argv[2]);
     time_t t;
     srand((unsigned) time(&t));
     int robot_coordinates[2] = {rand() % map_side_size, rand() % map_side_size};
