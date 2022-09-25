@@ -34,6 +34,8 @@ void free_map(struct Map * map);
 
 int choose_object();
 
-void gen_randon_object(struct Map * map);
+int int_in_array(int value, int array[], int size);
+
+void gen_random_object(struct Map * map);
 
 #endif // MAP_H_

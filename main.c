@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     char action_letter[2];
 
     do {
-        gen_randon_object(map);
+        gen_random_object(map);
         scanf("%s", &action_letter);
         switch (action_letter[0]) {
             case 'u':
