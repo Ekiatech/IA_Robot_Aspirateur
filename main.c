@@ -13,6 +13,10 @@
 
 void* robot_loop() {
     printf("RObot\n");
+    // GET INFO -> BELIEF + GREEDY SEARCH (+ HEURISTIQUE) + BREADTH-FIRST-SEARCH
+    // UPDATE STATE -> DESIRE + CHOISIR CHEMIN OPTIMAL
+    // CHOOSE ACTION -> INTENTIONS
+    // EXECUTE ACTION
 }
 
 void* map_loop() {
