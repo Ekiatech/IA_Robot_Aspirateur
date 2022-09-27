@@ -2,6 +2,7 @@
 #define DISPLAY_H_
 
 #include "map.h"
+#include "robot.h"
 
 void display_map(struct Map *map);
 
