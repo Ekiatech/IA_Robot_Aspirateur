@@ -17,6 +17,9 @@ void* robot_loop() {
 
 void* map_loop() {
     printf("Map\n");
+    // Loop :
+    // gen object
+    // sleep
 }
 
 int main(int argc, char **argv) {
