@@ -1,8 +1,6 @@
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
-#include "map.h"
-
 /************ ENUMs ************/
 
 typedef enum {
@@ -26,13 +24,5 @@ struct Robot {
 /************ FCTs ************/
 
 struct Robot * create_robot(int coordinates[2], int initial_energy);
-
-void clean(struct Map * map);
-
-void pick_up(struct Map * map);
-
-void move(struct Map * map, Action move);
-
-void action(struct Map * map, Action action);
 
 #endif // ROBOT_H_

@@ -38,4 +38,13 @@ int int_in_array(int value, int array[], int size);
 
 void gen_random_object(struct Map * map);
 
+
+void clean(struct Map * map);
+
+void pick_up(struct Map * map);
+
+void move(struct Map * map, Action move);
+
+void action(struct Map * map, Action action);
+
 #endif // MAP_H_
