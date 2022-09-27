@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "display.h"
 #include "robot.h"
@@ -8,6 +10,14 @@
 
 #define DEFAULT_MAP_SIDE_SIZE 5
 #define DEFAULT_ROBOT_ENERGY 200
+
+void* robot_loop() {
+    printf("RObot\n");
+}
+
+void* map_loop() {
+    printf("Map\n");
+}
 
 int main(int argc, char **argv) {
     int map_side_size = DEFAULT_MAP_SIDE_SIZE;
@@ -29,6 +39,13 @@ int main(int argc, char **argv) {
 
     Action current_action;
     char action_letter;
+
+    pthread_t robot_t, map_t;
+    pthread_create(&robot_t, NULL, &robot_loop, NULL);
+    pthread_create(&map_t, NULL, &map_loop, NULL);
+
+    pthread_join(robot_t, NULL);
+    pthread_join(map_t, NULL);
 
     do {
         gen_random_object(map);

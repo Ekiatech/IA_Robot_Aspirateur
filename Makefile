@@ -1,5 +1,5 @@
 all: main.o robot.o map.o display.o
-	gcc -g -o main main.o robot.o map.o display.o
+	gcc -g -o main main.o robot.o map.o display.o -pthread
 
 robot.o: robot.c robot.h
 	gcc -c robot.c
