@@ -42,4 +42,6 @@ int int_in_array(int value, int array[], int size);
 
 int place_object(struct Map * map, int x_room, int y_room, int object, int object_has_been_added);
 
+void gen_random_object(struct Map * map);
+
 #endif // MAP_H_
