@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
 
     struct Robot * robot = create_robot(robot_coordinates, robot_energy);
     struct Map * map = create_empty_map(map_side_size, robot);
+    init_map(map);
 
     display_map(map);
 
