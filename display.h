@@ -6,8 +6,6 @@
 
 void display_map(struct Map *map);
 
-void display_actions_help();
-
 void display_robot_attributes();
 
 #endif // DISPLAY_H_

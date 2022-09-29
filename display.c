@@ -59,18 +59,6 @@ void display_map(struct Map *map) {
     printf("\n\n");
     display_robot_attributes(map);
     printf("\n");
-    display_actions_help();
-    printf("\n");
-}
-
-void display_actions_help() {
-    printf("- u : move up\n");
-    printf("- r : move right\n");
-    printf("- d : move down\n");
-    printf("- l : move left\n");
-    printf("- c : clean\n");
-    printf("- p : pick up jewel\n");
-    printf("- s : stop\n");
 }
 
 void display_robot_attributes(struct Map *map) {

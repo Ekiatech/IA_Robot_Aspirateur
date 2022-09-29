@@ -61,48 +61,7 @@ int main(int argc, char **argv) {
     pthread_create(&map_t, NULL, (void * (*)(void *)) map_loop, (void *) map);
 
     pthread_join(robot_t, NULL);
-    pthread_join(map_t, NULL);
-
-    // do {
-    //     gen_random_object(map);
-    //     scanf("%s", &action_letter);
-    //     switch (action_letter) {
-    //         case 'u':
-    //         case 'U':
-    //             current_action = 0;
-    //             break;
-    //         case 'r':
-    //         case 'R':
-    //             current_action = 1;
-    //             break;
-    //         case 'd':
-    //         case 'D':
-    //             current_action = 2;
-    //             break;
-    //         case 'l':
-    //         case 'L':
-    //             current_action = 3;
-    //             break;
-    //         case 'c':
-    //         case 'C':
-    //             current_action = 4;
-    //             break;
-    //         case 'p':
-    //         case 'P':
-    //             current_action = 5;
-    //             break;
-    //         case 's':
-    //         case 'S':
-    //             current_action = 6;
-    //             break;
-    //         default:
-    //             printf("This key doesn't correspond to a valid action.\n");
-    //     }
-    //     action(map, current_action);
-    //     display_map(map);
-    // }
-    // while (current_action != 6);
-    
+    pthread_join(map_t, NULL);    
     
     free_map(map);
 
