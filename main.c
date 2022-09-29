@@ -12,18 +12,27 @@
 #define DEFAULT_ROBOT_ENERGY 200
 
 void* robot_loop() {
-    printf("RObot\n");
+    printf("Robot\n");
     // GET INFO -> BELIEF + GREEDY SEARCH (+ HEURISTIQUE) + BREADTH-FIRST-SEARCH
     // UPDATE STATE -> DESIRE + CHOISIR CHEMIN OPTIMAL
     // CHOOSE ACTION -> INTENTIONS
     // EXECUTE ACTION
 }
 
-void* map_loop() {
-    printf("Map\n");
-    // Loop :
-    // gen object
-    // sleep
+void * map_loop(struct Map * map) {
+    time_t start = time(NULL);
+    time_t seconds = 60;
+    time_t endwait = start + seconds;
+
+    while (start < endwait) {
+        printf("Map :\n");
+        gen_random_object(map);
+        display_map(map);
+        sleep(3);
+        start = time(NULL);
+    }
+
+    printf("Map : %ld seconds passed.\n", seconds);
 }
 
 int main(int argc, char **argv) {
@@ -49,50 +58,50 @@ int main(int argc, char **argv) {
 
     pthread_t robot_t, map_t;
     pthread_create(&robot_t, NULL, &robot_loop, NULL);
-    pthread_create(&map_t, NULL, &map_loop, NULL);
+    pthread_create(&map_t, NULL, (void * (*)(void *)) map_loop, (void *) map);
 
     pthread_join(robot_t, NULL);
     pthread_join(map_t, NULL);
 
-    do {
-        gen_random_object(map);
-        scanf("%s", &action_letter);
-        switch (action_letter) {
-            case 'u':
-            case 'U':
-                current_action = 0;
-                break;
-            case 'r':
-            case 'R':
-                current_action = 1;
-                break;
-            case 'd':
-            case 'D':
-                current_action = 2;
-                break;
-            case 'l':
-            case 'L':
-                current_action = 3;
-                break;
-            case 'c':
-            case 'C':
-                current_action = 4;
-                break;
-            case 'p':
-            case 'P':
-                current_action = 5;
-                break;
-            case 's':
-            case 'S':
-                current_action = 6;
-                break;
-            default:
-                printf("This key doesn't correspond to a valid action.\n");
-        }
-        action(map, current_action);
-        display_map(map);
-    }
-    while (current_action != 6);
+    // do {
+    //     gen_random_object(map);
+    //     scanf("%s", &action_letter);
+    //     switch (action_letter) {
+    //         case 'u':
+    //         case 'U':
+    //             current_action = 0;
+    //             break;
+    //         case 'r':
+    //         case 'R':
+    //             current_action = 1;
+    //             break;
+    //         case 'd':
+    //         case 'D':
+    //             current_action = 2;
+    //             break;
+    //         case 'l':
+    //         case 'L':
+    //             current_action = 3;
+    //             break;
+    //         case 'c':
+    //         case 'C':
+    //             current_action = 4;
+    //             break;
+    //         case 'p':
+    //         case 'P':
+    //             current_action = 5;
+    //             break;
+    //         case 's':
+    //         case 'S':
+    //             current_action = 6;
+    //             break;
+    //         default:
+    //             printf("This key doesn't correspond to a valid action.\n");
+    //     }
+    //     action(map, current_action);
+    //     display_map(map);
+    // }
+    // while (current_action != 6);
     
     
     free_map(map);
