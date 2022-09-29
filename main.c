@@ -7,9 +7,13 @@
 #include "display.h"
 #include "robot.h"
 #include "map.h"
+#include "queue.h"
 
 #define DEFAULT_MAP_SIDE_SIZE 5
 #define DEFAULT_ROBOT_ENERGY 200
+
+
+void bfs(struct Queue * q, struct Map * map);
 
 void* robot_loop() {
     printf("Robot\n");
@@ -35,6 +39,9 @@ void * map_loop(struct Map * map) {
     printf("Map : %ld seconds passed.\n", seconds);
 }
 
+
+
+
 int main(int argc, char **argv) {
     int map_side_size = DEFAULT_MAP_SIDE_SIZE;
     if (argc >= 2)
@@ -50,20 +57,29 @@ int main(int argc, char **argv) {
     struct Robot * robot = create_robot(robot_coordinates, robot_energy);
     struct Map * map = create_empty_map(map_side_size, robot);
     init_map(map);
-
     display_map(map);
 
-    Action current_action;
-    char action_letter;
+    // pthread_t robot_t, map_t;
+    // pthread_create(&robot_t, NULL, &robot_loop, NULL);
+    // pthread_create(&map_t, NULL, (void * (*)(void *)) map_loop, (void *) map);
 
-    pthread_t robot_t, map_t;
-    pthread_create(&robot_t, NULL, &robot_loop, NULL);
-    pthread_create(&map_t, NULL, (void * (*)(void *)) map_loop, (void *) map);
+    struct Queue * q = create_empty_queue(map);
 
-    pthread_join(robot_t, NULL);
-    pthread_join(map_t, NULL);    
+    int n_coordinates[2] = {1, 1};
+    struct Node * n = create_empty_node(map, n_coordinates);
+    push_queue(q, n);
+    display_queue(q);
+
+    pop_queue(q, map);
+    display_queue(q);
+    // pop_queue(q, map);
+    // display_queue(q);
+
+    // pthread_join(robot_t, NULL);
+    // pthread_join(map_t, NULL);    
     
     free_map(map);
+    free_queue(q);
 
     return 0;
 }

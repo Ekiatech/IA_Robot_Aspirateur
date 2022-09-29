@@ -3,8 +3,6 @@
 
 /************ ENUMs ************/
 
-struct Robot;
-
 typedef enum {
     NOTHING = 0,
     DUST = 1,
@@ -12,6 +10,8 @@ typedef enum {
 } Objects;
 
 /************ STRUCTs ************/
+
+struct Robot;
 
 struct Room {
     int position[2];

@@ -19,8 +19,7 @@ struct Map * create_empty_map(int size, struct Robot * robot) {
     map->rooms = (struct Room **) malloc(size * sizeof(struct Room *));
     for (int i = 0; i < size; i++) {
         map->rooms[i] = (struct Room *) malloc(size * sizeof(struct Room));
-        for (int j = 0; j < size; j++)
-        {
+        for (int j = 0; j < size; j++) {
             int room_position[2] = {i, j};
             map->rooms[i][j] = create_empty_room(room_position);
         }

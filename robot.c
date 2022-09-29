@@ -39,8 +39,7 @@ void pick_up(struct Map * map) {
     }
 }
 
-void move_up(struct Map * map, Action move) {
-    int x_robot = map->robot->position[1], y_robot = map->robot->position[0];
+void move(struct Map * map, Action move) {
     int new_y_position = map->robot->position[0] - 1;
     int new_x_position = map->robot->position[1] + 1;
     switch (move) {
@@ -81,6 +80,8 @@ void move_up(struct Map * map, Action move) {
                 printf("There is no room to the left of the robot.\n");
             }
             break;
+        default:
+            break;
     }
 }
 
@@ -99,7 +100,9 @@ void action(struct Map * map, Action action) {
         case RIGHT:
         case DOWN:
         case LEFT:
-            move_up(map, action);
+            move(map, action);
+            break;
+        default:
             break;
     }
 }
