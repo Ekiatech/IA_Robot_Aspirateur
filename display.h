@@ -15,4 +15,6 @@ void display_map_and_queue(struct Map * map, struct Queue * queue);
 
 void display_color_code();
 
+void display_map(struct Map * map);
+
 #endif // DISPLAY_H_

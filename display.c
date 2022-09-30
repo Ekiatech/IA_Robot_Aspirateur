@@ -116,3 +116,38 @@ void display_color_code() {
     printf("\t- \033[0;31mRed\033[0;37m : \tnode not in queue anymore\n");
     printf("\n\n\n");
 }
+
+
+void display_map(struct Map * map) {
+    int map_side_size = map->side_size;
+
+    display_top_map(map_side_size);
+    for (int i = 0; i < map_side_size; i++) {
+        for (int l = 0; l < 3; l++) {
+            for (int j = 0; j < map_side_size; j++) {
+                if (j == 0) {
+                    printf("|");
+                }
+                if ((map->robot->position[0] == i) && (map->robot->position[1] == j) && (l == 0))
+                    printf("   R");
+                if (((map->rooms[i][j].objects[0] == 1) || (map->rooms[i][j].objects[1] == 1)) && (l == 1))
+                    printf("   D");
+                if (((map->rooms[i ][j].objects[0] == 2) || (map->rooms[i][j].objects[1] == 2)) && (l == 2))
+                    printf("   J");
+                printf("\t|");
+            }
+            if (l == 1) {
+                printf("   %d", i);
+            }
+            printf("\n");
+        }
+        for (int i = 0; i < map_side_size; i++) {
+            printf("--------");
+        }
+        printf("\n");
+    }
+    display_bottom_map(map_side_size);
+    printf("\n\n");
+    display_robot_attributes(map);
+    printf("\n");
+}
