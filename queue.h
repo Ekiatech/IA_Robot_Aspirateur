@@ -26,7 +26,7 @@ struct Queue {
     int current_size;
     struct Node * front;
     struct Node * rear;
-    int * visited_indexes;
+    Status * visited_indexes;
 };
 
 /************ FCTs ************/

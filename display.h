@@ -17,4 +17,8 @@ void display_robot_attributes();
 
 void display_queue(struct Queue * q);
 
+void display_map_and_queue(struct Map * map, struct Queue * queue);
+
+void display_color_code();
+
 #endif // DISPLAY_H_
