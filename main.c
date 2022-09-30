@@ -12,6 +12,8 @@
 #define DEFAULT_MAP_SIDE_SIZE 5
 #define DEFAULT_ROBOT_ENERGY 20000
 
+pthread_mutex_t mutex_map;
+
 void bfs(struct Map * map) {
     struct Queue * q = create_empty_queue(map);
     int n_coordinates[2] = { map->robot->position[0], map->robot->position[1] };
@@ -98,8 +100,10 @@ void * robot_loop(struct Map * map) {
     time_t endwait = start + seconds;
 
     while (start < endwait) {
+        pthread_mutex_lock(&mutex_map);
         bfs(map);
         start = time(NULL);
+        pthread_mutex_unlock(&mutex_map);
     }
     printf("Robot : %ld seconds passed.\n\n", seconds);
 
@@ -119,10 +123,12 @@ void * map_loop(struct Map * map) {
     time_t endwait = start + seconds;
 
     while (start < endwait) {
+        pthread_mutex_lock(&mutex_map);
         gen_random_object(map);
         display_map(map);
         sleep(1);
         start = time(NULL);
+        pthread_mutex_unlock(&mutex_map);
     }
 
     printf("\nMap : %ld seconds passed.\n\n", seconds);
@@ -148,6 +154,7 @@ int main(int argc, char **argv) {
     init_map(map);
 
     pthread_t robot_t, map_t;
+    pthread_mutex_init(&mutex_map, NULL);
     pthread_create(&robot_t, NULL, (void * (*)(void *)) robot_loop, (void *) map);
     pthread_create(&map_t, NULL, (void * (*)(void *)) map_loop, (void *) map);
 
