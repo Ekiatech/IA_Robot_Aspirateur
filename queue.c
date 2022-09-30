@@ -7,12 +7,14 @@
 int assign_one_neighbor(int condition, int x, int y, struct Map * map, struct Node * node, int neighbors_counter, struct Queue * q) {
     int neighbor_coordinates[2] = {0, 0};
     int side_size = sqrt(q->max_size);
-    int has_been_visited = (q->visited_indexes[y * side_size + x] != 0);
-    if (condition && !has_been_visited) {
-        neighbor_coordinates[0] = y;
-        neighbor_coordinates[1] = x;
-        node->neighbors[neighbors_counter] = create_empty_node(map, neighbor_coordinates);
-        neighbors_counter++;
+    if (condition) {
+        int has_been_visited = (q->visited_indexes[y * side_size + x] != 0);
+        if (!has_been_visited) {
+            neighbor_coordinates[0] = y;
+            neighbor_coordinates[1] = x;
+            node->neighbors[neighbors_counter] = create_empty_node(map, neighbor_coordinates);
+            neighbors_counter++;
+        }
     }
     return neighbors_counter;
 }

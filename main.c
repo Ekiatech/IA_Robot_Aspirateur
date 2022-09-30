@@ -92,7 +92,7 @@ void bfs(struct Map * map) {
 
 void * robot_loop(struct Map * map) {
     time_t start = time(NULL);
-    time_t seconds = 60;
+    time_t seconds = 5;
     time_t endwait = start + seconds;
 
     while (start < endwait) {
@@ -109,7 +109,7 @@ void * robot_loop(struct Map * map) {
 
 void * map_loop(struct Map * map) {
     time_t start = time(NULL);
-    time_t seconds = 60;
+    time_t seconds = 5;
     time_t endwait = start + seconds;
 
     while (start < endwait) {
