@@ -58,9 +58,9 @@ int choose_dust_or_jewel() {
 
 int choose_object() {
     int random = rand() % 100;
-    if (random <= 50)
+    if (random <= 30)
         return 0;
-    else if ((random > 50) && (random <= 90))
+    else if ((random > 30) && (random <= 80))
         return 1;
     return 2;    
 }
