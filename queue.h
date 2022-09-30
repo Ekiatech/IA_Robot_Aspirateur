@@ -26,13 +26,14 @@ struct Queue {
     int current_size;
     struct Node * front;
     struct Node * rear;
+    int * visited_indexes;
 };
 
 /************ FCTs ************/
 
-int assign_one_neighbor(int condition, int x, int y, struct Map * map, struct Node * node, int neighbors_counter);
+int assign_one_neighbor(int condition, int x, int y, struct Map * map, struct Node * node, int neighbors_counter, struct Queue * q);
 
-int assign_neighbors(struct Node * node, struct Map * map);
+int assign_neighbors(struct Node * node, struct Map * map, struct Queue * q);
 
 struct Node * create_empty_node(struct Map * map, int coordinates[2]);
 

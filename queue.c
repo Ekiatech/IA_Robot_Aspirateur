@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "queue.h"
 
-int assign_one_neighbor(int condition, int x, int y, struct Map * map, struct Node * node, int neighbors_counter) {
+int assign_one_neighbor(int condition, int x, int y, struct Map * map, struct Node * node, int neighbors_counter, struct Queue * q) {
     int neighbor_coordinates[2] = {0, 0};
-    if (condition) {
+    int side_size = sqrt(q->max_size);
+    int has_been_visited = (q->visited_indexes[y * side_size + x] != 0);
+    if (condition && !has_been_visited) {
         neighbor_coordinates[0] = y;
         neighbor_coordinates[1] = x;
         node->neighbors[neighbors_counter] = create_empty_node(map, neighbor_coordinates);
@@ -14,7 +17,7 @@ int assign_one_neighbor(int condition, int x, int y, struct Map * map, struct No
     return neighbors_counter;
 }
 
-int assign_neighbors(struct Node * node, struct Map * map) {
+int assign_neighbors(struct Node * node, struct Map * map, struct Queue * q) {
     int not_first_line      = (node->room->position[0] > 0);
     int not_last_line       = (node->room->position[0] < (map->side_size - 1));
     int not_first_column    = (node->room->position[1] > 0);
@@ -25,10 +28,10 @@ int assign_neighbors(struct Node * node, struct Map * map) {
 
     int neighbors_counter = 0;
 
-    neighbors_counter = assign_one_neighbor(not_first_line,    x_node,     y_node - 1, map, node, neighbors_counter);
-    neighbors_counter = assign_one_neighbor(not_last_column,   x_node + 1, y_node,     map, node, neighbors_counter);
-    neighbors_counter = assign_one_neighbor(not_last_line,     x_node,     y_node + 1, map, node, neighbors_counter);
-    neighbors_counter = assign_one_neighbor(not_first_column,  x_node - 1, y_node,     map, node, neighbors_counter);
+    neighbors_counter = assign_one_neighbor(not_first_line,    x_node,     y_node - 1, map, node, neighbors_counter, q);
+    neighbors_counter = assign_one_neighbor(not_last_column,   x_node + 1, y_node,     map, node, neighbors_counter, q);
+    neighbors_counter = assign_one_neighbor(not_last_line,     x_node,     y_node + 1, map, node, neighbors_counter, q);
+    neighbors_counter = assign_one_neighbor(not_first_column,  x_node - 1, y_node,     map, node, neighbors_counter, q);
 
     return neighbors_counter;
 }
@@ -52,6 +55,9 @@ struct Queue * create_empty_queue(struct Map * map) {
     queue->current_size = 0;
     queue->front = NULL;
     queue->rear = NULL;
+    queue->visited_indexes = malloc(sizeof(int) * queue->max_size);
+    for (int i = 0; i < queue->max_size; i++)
+        queue->visited_indexes[i] = 0;
     return queue;
 }
 
@@ -95,6 +101,9 @@ void push_queue(struct Queue * q, struct Node * node) {
         }
         q->rear = node;
         q->current_size++;
+
+        int side_size = sqrt(q->max_size);
+        q->visited_indexes[node->room->position[0] * side_size + node->room->position[1]] = 1;
     }
 }
 
@@ -105,11 +114,15 @@ struct Node * pop_queue(struct Queue * q, struct Map * map) {
         q->current_size--;
         node->status = OUT_QUEUE;
         q->front = q->front->previous;
-        int nb_neighbors = assign_neighbors(node, map);
+        int nb_neighbors = assign_neighbors(node, map, q);
         for (int i = 0; i < nb_neighbors; i++) {
             push_queue(q, node->neighbors[i]);
         }
-        q->front->next = NULL;
+        if (q->front != NULL)
+            q->front->next = NULL;
+
+        int side_size = sqrt(q->max_size);
+        q->visited_indexes[node->room->position[0] * side_size + node->room->position[1]] = 2;
     }
     return node;
 }
@@ -129,5 +142,6 @@ void free_queue(struct Queue * q) {
         node = node->previous;
         free_node(node_free);
     }
+    free(q->visited_indexes);
     free(q);
 }

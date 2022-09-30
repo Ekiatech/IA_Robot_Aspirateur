@@ -45,8 +45,14 @@ void display_map_or_queue(struct Map * map, int ** status, int map_side_size) {
                     printf("|");
                 }
                 if (status != NULL) {
-                    if (l == 1)
-                        printf("   %d", status[i][j]);
+                    if (l == 1) {
+                        if (status[i][j] == 0)
+                            printf("   %d", status[i][j]);
+                        if (status[i][j] == 1)
+                            printf("   \033[0;35m%d\033[0;37m", status[i][j]);
+                        if (status[i][j] == 2)
+                            printf("   \033[0;31m%d\033[0;37m", status[i][j]);
+                    }
                 }
                 else if (map != NULL) {
                     if ((map->robot->position[0] == i) && (map->robot->position[1] == j) && (l == 0))
@@ -88,73 +94,9 @@ void display_robot_attributes(struct Map * map) {
     printf("\t- points : %d\n", map->robot->points);
 }
 
-
-// // Display status of nodes in queue from Front to Rear
-// void display_queue(struct Queue * q) {
-//     int side_size = sqrt(q->max_size);
-//     struct Node * current_node = q->front;
-//     int column_counter = 0;
-//     int is_last_line, is_top, is_bottom;
-
-//     printf("\nQueue :\n");
-//     printf("max size = %d\n", q->max_size);
-//     printf("current size = %d\n", q->current_size);
-//     printf("STATUS :\n");
-//     display_top_map(side_size);
-
-//     while (current_node != NULL) {
-//         is_last_line = (column_counter == q->max_size - 1);
-//         is_top = ((column_counter % side_size == 0) && !is_last_line);
-//         is_bottom = ((column_counter + 1) % side_size == 0);
-
-//         if (column_counter == 0)
-//             printf("|");
-
-//         if (is_top) {
-//             for (int i = 0; i < side_size; i++) {
-//                 printf("   \t|");
-//             }
-//             printf("\n|");
-//         }
-
-//         printf("   %d\t|", current_node->status);
-        
-
-//         if (is_bottom) {
-//             printf("   %d\n|", column_counter / side_size);
-//             if (!is_last_line) {
-//                 for (int i = 0; i < side_size; i++) {
-//                     printf("   \t|");
-//                 }
-//                 printf("\n|");
-//                 for (int i = 0; i < side_size; i++) {
-//                     printf("--------");
-//                 }
-//                 printf("\n|");
-//             }
-//         }
-        
-//         current_node = current_node->previous;
-//         column_counter++;
-//     }
-    
-//     for (int i = 0; i < side_size; i++) {
-//         printf("   \t|");
-//     }
-//     printf("\n");
-//     for (int i = 0; i < side_size; i++) {
-//         printf("--------");
-//     }
-//     printf("\n");
-//     display_bottom_map(side_size);
-//     printf("\n");
-// }
-
-// Display status of nodes in queue from Front to Rear
+// Display status of nodes on map
 void display_queue(struct Queue * q) {
     int side_size = sqrt(q->max_size);
-    struct Node * current_node = q->front;
-    int column_counter = 0;
     int ** status_mat = (int **) malloc(side_size * sizeof(int *));
 
     for (int i = 0; i < side_size; i++) {
@@ -169,14 +111,10 @@ void display_queue(struct Queue * q) {
     printf("current size = %d\n", q->current_size);
     printf("Status :\n");
 
-    while (current_node != NULL) {
-        // printf("%d:%d = %d\n", current_node->room->position[0], current_node->room->position[1], current_node->status);
-        // printf("current_node->room->position[0] = %d, current_node->room->position[1] = %d\n", current_node->room->position[0], current_node->room->position[1]);
-        // printf("status_mat[current_node->room->position[0]][current_node->room->position[1]] = %d\n", status_mat[current_node->room->position[0]][current_node->room->position[1]]);
-        // printf("current_node->status = %d\n", current_node->status);
-        status_mat[current_node->room->position[0]][current_node->room->position[1]] = current_node->status;
-        current_node = current_node->previous;
-        column_counter++;
+    for (int i = 0; i < side_size; i++) {
+        for (int j = 0; j < side_size; j++) {
+                status_mat[i][j] = q->visited_indexes[i * side_size + j];
+        }
     }
 
     display_map_or_queue(NULL, status_mat, side_size);

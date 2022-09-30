@@ -13,10 +13,21 @@
 #define DEFAULT_ROBOT_ENERGY 200
 
 
-void bfs(struct Queue * q, struct Map * map);
+void * robot_loop(struct Map * map) {
+    printf("Robot :\n");
+    struct Queue * q = create_empty_queue(map);
+    int n_coordinates[2] = { map->robot->position[0], map->robot->position[1] };
+    struct Node * n = create_empty_node(map, n_coordinates);
+    push_queue(q, n);
+    display_queue(q);
+    while (!queue_is_empty(q)) {
+        pop_queue(q, map);
+        display_queue(q);
+        printf("\n");        
+    }
+    free_queue(q);
 
-void* robot_loop() {
-    printf("Robot\n");
+    printf("Robot : finished.\n");
     // GET INFO -> BELIEF + GREEDY SEARCH (+ HEURISTIQUE) + BREADTH-FIRST-SEARCH
     // UPDATE STATE -> DESIRE + CHOISIR CHEMIN OPTIMAL
     // CHOOSE ACTION -> INTENTIONS
@@ -24,19 +35,19 @@ void* robot_loop() {
 }
 
 void * map_loop(struct Map * map) {
-    time_t start = time(NULL);
-    time_t seconds = 60;
-    time_t endwait = start + seconds;
+    // time_t start = time(NULL);
+    // time_t seconds = 60;
+    // time_t endwait = start + seconds;
 
-    while (start < endwait) {
-        printf("Map :\n");
-        gen_random_object(map);
-        display_map(map);
-        sleep(3);
-        start = time(NULL);
-    }
+    // while (start < endwait) {
+    //     printf("Map :\n");
+    //     gen_random_object(map);
+    //     display_map(map);
+    //     sleep(3);
+    //     start = time(NULL);
+    // }
 
-    printf("Map : %ld seconds passed.\n", seconds);
+    // printf("Map : %ld seconds passed.\n", seconds);
 }
 
 
@@ -59,27 +70,26 @@ int main(int argc, char **argv) {
     init_map(map);
     display_map(map);
 
-    // pthread_t robot_t, map_t;
-    // pthread_create(&robot_t, NULL, &robot_loop, NULL);
-    // pthread_create(&map_t, NULL, (void * (*)(void *)) map_loop, (void *) map);
+    // struct Queue * q = create_empty_queue(map);
 
-    struct Queue * q = create_empty_queue(map);
+    // int n_coordinates[2] = {robot->position[0], robot->position[1]};
+    // struct Node * n = create_empty_node(map, n_coordinates);
+    // push_queue(q, n);
+    // display_queue(q);
 
-    int n_coordinates[2] = {1, 1};
-    struct Node * n = create_empty_node(map, n_coordinates);
-    push_queue(q, n);
-    display_queue(q);
-
-    pop_queue(q, map);
-    display_queue(q);
+    // pop_queue(q, map);
+    // display_queue(q);
     // pop_queue(q, map);
     // display_queue(q);
 
-    // pthread_join(robot_t, NULL);
-    // pthread_join(map_t, NULL);    
+    pthread_t robot_t, map_t;
+    pthread_create(&robot_t, NULL, (void * (*)(void *)) robot_loop, (void *) map);
+    pthread_create(&map_t, NULL, (void * (*)(void *)) map_loop, (void *) map);
+
+    pthread_join(robot_t, NULL);
+    pthread_join(map_t, NULL);
     
     free_map(map);
-    free_queue(q);
 
     return 0;
 }
