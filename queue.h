@@ -19,6 +19,8 @@ struct Node {
     struct Node ** neighbors;
     struct Node * previous;
     struct Node * next;
+    int ** path;
+    int length_path;
 };
 
 struct Queue {

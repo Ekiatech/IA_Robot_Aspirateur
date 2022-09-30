@@ -46,6 +46,11 @@ struct Node * create_empty_node(struct Map * map, int coordinates[2]) {
     }
     node->previous = NULL;
     node->next = NULL;
+    int total_map_size = map->side_size * map->side_size;
+    node->path = (int **) malloc(sizeof(int *) * total_map_size);
+    for (int i = 0; i < total_map_size; ++i)
+        node->path[i] = (int *) malloc(sizeof(int) * 2);
+    node->length_path = 0;
     return node;
 }
 
@@ -116,6 +121,12 @@ struct Node * pop_queue(struct Queue * q, struct Map * map) {
         q->front = q->front->previous;
         int nb_neighbors = assign_neighbors(node, map, q);
         for (int i = 0; i < nb_neighbors; i++) {
+            for (int j = 0; j < node->length_path; j++) {
+                node->neighbors[i]->path[j] = node->path[j];
+            }
+            node->neighbors[i]->length_path = node->length_path + 1;
+            node->neighbors[i]->path[node->length_path][0] = node->room->position[0];
+            node->neighbors[i]->path[node->length_path][1] = node->room->position[1];
             push_queue(q, node->neighbors[i]);
         }
         if (q->front != NULL)
@@ -131,6 +142,7 @@ void free_node(struct Node * node) {
     free(node->neighbors);
     node->next = NULL;
     node->previous = NULL;
+    free(node->path);
     free(node);
 }
 
