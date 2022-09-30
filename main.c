@@ -36,6 +36,7 @@ void bfs(struct Map * map) {
     }
 
     if (q->current_size != 0) {
+        int current_path;
         for (int j = 0; j < n->length_path; j++) {
             selected_path[j][0] = n->path[j][0];
             selected_path[j][1] = n->path[j][1];
@@ -84,6 +85,7 @@ void bfs(struct Map * map) {
         display_map_and_queue(map, q);
     }
 
+    free_node(n);
     free_queue(q);
 }
 
@@ -99,12 +101,16 @@ void * robot_loop(struct Map * map) {
         bfs(map);
         start = time(NULL);
     }
-
     printf("Robot : %ld seconds passed.\n\n", seconds);
+
     // GET INFO -> BELIEF + GREEDY SEARCH (+ HEURISTIQUE) + BREADTH-FIRST-SEARCH
     // UPDATE STATE -> DESIRE + CHOISIR CHEMIN OPTIMAL
     // CHOOSE ACTION -> INTENTIONS
     // EXECUTE ACTION
+
+    // for (int i = 0; i < 2; i++) {
+    //     bfs(map);
+    // }
 }
 
 void * map_loop(struct Map * map) {
@@ -114,7 +120,7 @@ void * map_loop(struct Map * map) {
 
     while (start < endwait) {
         gen_random_object(map);
-        // printf("\nMap");
+        display_map(map);
         sleep(1);
         start = time(NULL);
     }

@@ -43,9 +43,8 @@ struct Node * create_empty_node(struct Map * map, int coordinates[2]) {
     node->status = NOT_VISITED;
     node->room = &map->rooms[coordinates[0]][coordinates[1]];
     node->neighbors = (struct Node **) malloc(sizeof(struct Node * ) * 4);
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i)
         node->neighbors[i] = NULL;
-    }
     node->previous = NULL;
     node->next = NULL;
     int total_map_size = map->side_size * map->side_size;
@@ -136,6 +135,11 @@ struct Node * pop_queue(struct Queue * q, struct Map * map) {
 
         int side_size = sqrt(q->max_size);
         q->visited_indexes[node->room->position[0] * side_size + node->room->position[1]] = 2;
+
+        // for (int i = 0; i < q->max_size; i++) {
+        //     free(node->path[i]);
+        // }
+        // free(node);
     }
     return node;
 }
