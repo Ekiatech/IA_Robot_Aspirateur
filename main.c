@@ -87,10 +87,7 @@ void * map_loop(struct Map * map) {
     time_t endwait = start + seconds;
 
     while (start < endwait) {
-        printf("Map :\n");
         gen_random_object(map);
-        display_map(map);
-        // sleep(0.01);
         start = time(NULL);
     }
 
@@ -115,7 +112,6 @@ int main(int argc, char **argv) {
     struct Robot * robot = create_robot(robot_coordinates, robot_energy);
     struct Map * map = create_empty_map(map_side_size, robot);
     init_map(map);
-    display_map(map);
 
     pthread_t robot_t, map_t;
     pthread_create(&robot_t, NULL, (void * (*)(void *)) robot_loop, (void *) map);
