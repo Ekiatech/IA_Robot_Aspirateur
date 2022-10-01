@@ -20,18 +20,8 @@ void action_loop(struct Map * map) {
     // EXECUTE ACTION
 
     while (map->robot->energy > 0) {
-        int ** stats = calculate_stats_bfs(map);
-        int best_nb_actions = selected_best_nb_action_before_observation(stats);
-
-        for (int i = 1; i <= MAX_DISTANCE; i++) {
-            for (int j = 0; j < NB_LEARNING_LOOPS; j++) {
-                printf("%d ", stats[i - 1][j]);
-            }
-            printf("\n\n");
-        }
-        printf("\n");
-        printf("Best nb actions before observation = %d\n", best_nb_actions);
-        printf("\n");
+        int best_nb_actions = best_nb_actions_bfs(map);
+        printf("Best nb actions before observation = %d\n\n", best_nb_actions);
 
         time_t start = time(NULL);
         time_t seconds = 5;
@@ -45,6 +35,11 @@ void action_loop(struct Map * map) {
     
     printf("End.\n\n");
 }
+
+// void test_loop(struct Map * map) {
+//     int best = best_nb_actions_bfs(map);
+//     printf("Best = %d\n", best);
+// }
 
 
 
@@ -66,6 +61,7 @@ int main(int argc, char **argv) {
     init_map(map);
 
     action_loop(map);
+    // test_loop(map);
     
     free_map(map);
 

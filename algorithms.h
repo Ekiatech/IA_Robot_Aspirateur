@@ -21,8 +21,6 @@ int ** retrieve_path(struct Node * n);
 
 void bfs(struct Map * map, int nb_action_btw_update_map);
 
-int ** calculate_stats_bfs(struct Map * map);
-
-int selected_best_nb_action_before_observation(int ** stats);
+int best_nb_actions_bfs(struct Map * map);
 
 #endif // ALGORITHMS_H_

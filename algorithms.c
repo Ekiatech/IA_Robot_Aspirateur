@@ -125,38 +125,26 @@ void bfs(struct Map * map, int nb_action_btw_update_map) {
     // Free
     free_node(n);
     free_queue(q);
+    // for (int i = 0; i < (n->length_path + 1); i++)
+    //     free(selected_path[i]);
+    // free(selected_path);
 }
 
-int ** calculate_stats_bfs(struct Map * map) {
-    int ** stats = malloc(sizeof(int *) * MAX_DISTANCE);
+int best_nb_actions_bfs(struct Map * map) {
+    int stats_sums[MAX_DISTANCE - 1];
     for (int i = 0; i < MAX_DISTANCE; i++)
-        stats[i] = malloc(sizeof(int *) * NB_LEARNING_LOOPS);
-    int current_points = 0;
+        stats_sums[i] = 0;
 
+    int current_points = 0;
     for (int i = 1; i <= MAX_DISTANCE; i++) {
         for (int j = 0; j < NB_LEARNING_LOOPS; j++) {
             current_points = map->robot->points;
             bfs(map, i);
-            stats[i - 1][j] = map->robot->points - current_points;
+            stats_sums[i - 1] += (map->robot->points - current_points);
         }
     }
 
-    return stats;
-}
-
-int selected_best_nb_action_before_observation(int ** stats) {
-    int stats_sums[MAX_DISTANCE - 1];
     int max = 0, best_nb_actions = 1;
-
-    for (int i = 0; i < MAX_DISTANCE; i++)
-        stats_sums[i] = 0;
-
-    for (int i = 1; i <= MAX_DISTANCE; i++) {
-        for (int j = 0; j < NB_LEARNING_LOOPS; j++) {
-            stats_sums[i - 1] += stats[i - 1][j];
-        }
-    }
-
     for (int i = 0; i < MAX_DISTANCE; i++) {
         if (stats_sums[i] > max) {
             max = stats_sums[i];
