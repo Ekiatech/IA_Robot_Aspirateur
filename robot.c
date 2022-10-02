@@ -106,3 +106,50 @@ void robot_action(struct Map * map, Action action) {
             break;
     }
 }
+
+void test(struct Map * map){
+    for (int i = 0; i < map->side_size; i++){
+        for (int j = 0; j < map->side_size; j++){
+            printf("(%d, %d) : %d\n", i, j, map->rooms[i][j].objects[0]);
+        }
+    }
+    printf("==============================================\n");
+}
+
+int distance_robot_room(struct Map* map, int x, int y){
+    int x_robot = map->robot->position[0];
+    int y_robot = map->robot->position[0];
+    int x_dist = (x > x_robot) ? x - x_robot : x_robot - x;
+    int y_dist = (y > y_robot) ? y - y_robot : y_robot - y;
+    return x_dist + y_dist;
+}
+
+void heuristic(struct Map* map){
+    for (int i = 0; i < map->side_size; i++){
+        for (int j = 0; j < map->side_size; j++){
+            int object1 = map->rooms[i][j].objects[0];
+            object1 = (object1 == DUST) ? object1 * 10 : object1 * 5; 
+            int object2 = map->rooms[i][j].objects[1];
+            object2 = (object2 == DUST) ? object2 * 10 : object2 * 5; 
+            int dist = distance_robot_room(map, i, j);
+            int heuristicTemp = object1 + object2 - dist;
+            heuristicTemp = (heuristicTemp < 0) ? 0 : heuristicTemp;
+            map->rooms[i][j].heuristic = heuristicTemp;
+            
+            printf("(%d, %d) : %d\n", i, j, map->rooms[i][j].heuristic);
+        }
+    }
+}
+
+
+
+void greedy_best_first_search_depth(struct Map* map, int depth){
+    struct queue * q_path = create_empty_queue();
+    struct queue * q_waiting = create_empty_queue();
+
+    int i = map->robot->position[0];
+    int j = map->robot->position[1];
+    struct node * n = create_node(map, i, j);
+
+    push(q_path, n);
+}

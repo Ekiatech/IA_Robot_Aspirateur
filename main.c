@@ -119,7 +119,7 @@ void * robot_loop(struct Map * map) {
 
 void * map_loop(struct Map * map) {
     time_t start = time(NULL);
-    time_t seconds = 5;
+    time_t seconds = 10;
     time_t endwait = start + seconds;
 
     while (start < endwait) {
