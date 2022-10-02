@@ -151,3 +151,14 @@ void display_map(struct Map * map) {
     display_robot_attributes(map);
     printf("\n");
 }
+
+void display_path_goal_objects(struct Node * n, int ** selected_path, int objects[2], int goal[2]) {
+    int first_object = objects[0], second_object = objects[1];
+    printf("Path = ");
+    for (int j = 0; j < n->length_path + 1; j++) {
+        printf("%d:%d ", selected_path[j][0], selected_path[j][1]);
+    }
+    printf("\n");
+    printf("Goal = %d:%d - ", goal[0], goal[1]);
+    printf("Objects : %d, %d\n", first_object, second_object);
+}

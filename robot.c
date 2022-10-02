@@ -86,7 +86,8 @@ void move(struct Map * map, Action move) {
 }
 
 void robot_action(struct Map * map, Action action) {
-    map->robot->energy -= 1;
+    if (action != STOP)
+        map->robot->energy -= 1;
     switch (action) {
         case CLEAN:
             clean(map);

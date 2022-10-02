@@ -1,5 +1,5 @@
-all: main.o robot.o map.o queue.o display.o queue_informed_algo.o
-	gcc -o main main.o robot.o map.o queue.o display.o queue_informed_algo.o -pthread -lm && make clean_o
+all: main.o robot.o map.o queue.o algorithms.o display.o queue_informed_algo.o
+	gcc -o main main.o robot.o map.o queue.o algorithms.o queue_informed_algo.o display.o -pthread -lm && make clean_o
 
 robot.o: robot.c robot.h
 	gcc -g -Wall -c robot.c
@@ -9,6 +9,9 @@ map.o: map.c map.h robot.h
 
 queue.o: queue.c queue.h map.h
 	gcc -g -Wall -c queue.c
+
+algorithms.o: algorithms.c queue.h map.h
+	gcc -g -Wall -c algorithms.c
 
 display.o: display.c display.h map.h robot.h
 	gcc -g -Wall -c display.c -lm

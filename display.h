@@ -17,4 +17,6 @@ void display_color_code();
 
 void display_map(struct Map * map);
 
+void display_path_goal_objects(struct Node * n, int ** selected_path, int objects[2], int goal[2]);
+
 #endif // DISPLAY_H_
