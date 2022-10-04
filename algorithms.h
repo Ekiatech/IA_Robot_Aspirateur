@@ -5,7 +5,7 @@
 #include "queue.h"
 
 #define MAX_DISTANCE 8
-#define NB_LEARNING_LOOPS 100
+#define NB_LEARNING_LOOPS 20
 
 /************ FCTs ************/
 
