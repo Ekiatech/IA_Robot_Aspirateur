@@ -1,6 +1,5 @@
 #include "greedy_best_first_search_depth.h"
 
-
 struct node* get_best_node(struct queue* q){
     struct node* best_node = q->first;
     printf("ADRESSE : %p\n", best_node->room);
@@ -40,9 +39,9 @@ int not_depth_reached(struct queue* q_path, int depth, struct node* initial_node
     return -1;
 }
 
-void push_the_good_path(struct queue* q_path, struct node* initial_node, struct node* the_good_path[]){
+void push_the_good_path(struct queue* q_path, struct node* initial_node, struct node* the_good_path[], int depth){
     struct node* n = q_path->last;
-    int i = DEPTH;
+    int i = depth;
     while (i > 0){
         the_good_path[i-1] = n;
         n = n->add_by_this_node;
@@ -59,7 +58,6 @@ void push_nodes_in_waiting_queue(struct Map* map, struct queue* q_waiting, struc
         }        
     }
 }
-
 
 struct node** greedy_best_first_search_depth(struct Map* map, int depth){
     struct queue* q_waiting = create_empty_queue_informed();
@@ -89,9 +87,9 @@ struct node** greedy_best_first_search_depth(struct Map* map, int depth){
         the_good_path_reached = not_depth_reached(q_path, depth, initial_node);
     }
     
-    struct node** the_good_path = malloc(DEPTH * sizeof(struct node));
+    struct node** the_good_path = malloc(depth * sizeof(struct node));
 
-    push_the_good_path(q_path, initial_node, the_good_path);
+    push_the_good_path(q_path, initial_node, the_good_path, depth);
 
     free_queue_informed(q_waiting);
     free_queue_informed(q_path);
@@ -112,25 +110,21 @@ Action which_side_to_move(int i, int j, struct Room* to){
    return RIGHT;
 }
 
-void follow_path_greedy(struct Map* map, struct Robot* robot, struct node* path[]){
+void follow_path_greedy(struct Map* map, struct Robot* robot, struct node* path[], int depth){
     int i = robot->position[0];
     int j = robot->position[1];
 
     int n = 0;
-
-    while (n < DEPTH){
+    printf("DEPTH : %d\n", depth);
+    while (n < depth){
         struct node* node = path[n];
         Action action = which_side_to_move(i, j, node->room);
         robot_action(map, action);
 
-        printf("OBJET : %d %d (%d %d)\n", node->room->objects[0], node->room->objects[1], node->room->position[0], node->room->position[1]);
         if (node->room->objects[0] == JEWEL || node->room->objects[1] == JEWEL)
             robot_action(map, PICK_UP);
         if (node->room->objects[0] == DUST || node->room->objects[1] == DUST){
-            printf("JE CLEAN\n");
-            printf("POS ROBOT : %d %d -> %d\n", robot->position[0], robot->position[1], robot->points);
             robot_action(map, CLEAN);
-            printf("APRES CLEAN : %d %d (%d %d)\n", node->room->objects[0], node->room->objects[1], node->room->position[0], node->room->position[1]);
         }
 
         i = node->room->position[0];

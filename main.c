@@ -13,6 +13,32 @@
 
 #define DEFAULT_MAP_SIDE_SIZE 5
 #define DEFAULT_ROBOT_ENERGY 2000
+#define DEFAULT_DEPTH 7
+
+void arguments_given(int argc, char* argv[], int* map_side_size, int* robot_energy, int* depth) {
+    int n = 1;
+    while (argc > n){
+        switch (*(argv[n] + 1))
+        {
+        case 'n':
+            *map_side_size = atoi(argv[n+1]);
+            n++;
+            break;
+        case 'e':
+            *robot_energy = atoi(argv[n+1]);
+            n++;
+            break;
+        case 'd':
+            *depth = atoi(argv[n+1]);
+            n++;
+            break;        
+        default:
+            n++;
+            break;
+        }
+        n++;
+    }
+}
 
 void action_loop(struct Map * map) {
     // GET INFO -> BELIEF + GREEDY SEARCH (+ HEURISTIQUE) + BREADTH-FIRST-SEARCH
@@ -47,11 +73,17 @@ void action_loop(struct Map * map) {
 int main(int argc, char **argv) {
     int map_side_size = DEFAULT_MAP_SIDE_SIZE;
     int robot_energy = DEFAULT_ROBOT_ENERGY;
+    int depth = DEFAULT_DEPTH;
     int robot_points = 0;
-    if (argc >= 2)
+    /*if (argc >= 2)
         map_side_size = atoi(argv[1]);
     if (argc >= 3)
-        robot_energy = atoi(argv[2]);
+        robot_energy = atoi(argv[2]);*/
+
+    arguments_given(argc, argv, &map_side_size, &robot_energy, &depth);
+    printf("Paramètres du plateau : \n");
+    printf("Taille cote : %d\nEnergie du robot : %d\n", map_side_size, robot_energy);
+    printf("Profondeur actuelle pour le Greedy Best First Search Algorithme %d\n", depth);
 
     time_t t;
     srand((unsigned) time(&t));
@@ -66,10 +98,10 @@ int main(int argc, char **argv) {
             get_neighbors(map, &(map->rooms[i][j]));
     }
 
-    struct node** path = greedy_best_first_search_depth(map, DEPTH);
-    follow_path_greedy(map, robot, path);
+    struct node** path = greedy_best_first_search_depth(map, depth);
+    follow_path_greedy(map, robot, path, depth);
 
-    for (int i = 0; i < DEPTH; i++){
+    for (int i = 0; i < depth; i++){
         printf("%d %d -> ", path[i]->room->position[0], path[i]->room->position[1]);
     }
     //show_queue(path);
