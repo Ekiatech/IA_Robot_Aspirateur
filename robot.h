@@ -4,8 +4,6 @@
 #include "map.h"
 #include "queue_informed_algo.h"
 
-#define DEPTH 7
-
 /************ ENUMs ************/
 
 typedef enum {

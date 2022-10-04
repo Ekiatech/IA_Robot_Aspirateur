@@ -117,10 +117,12 @@ void follow_path_greedy(struct Map* map, struct Robot* robot, struct node* path[
     int j = robot->position[1];
 
     int n = 0;
+
     while (n < DEPTH){
-        display_map(map);
         struct node* node = path[n];
         Action action = which_side_to_move(i, j, node->room);
+        robot_action(map, action);
+
         printf("OBJET : %d %d (%d %d)\n", node->room->objects[0], node->room->objects[1], node->room->position[0], node->room->position[1]);
         if (node->room->objects[0] == JEWEL || node->room->objects[1] == JEWEL)
             robot_action(map, PICK_UP);
@@ -130,7 +132,6 @@ void follow_path_greedy(struct Map* map, struct Robot* robot, struct node* path[
             robot_action(map, CLEAN);
             printf("APRES CLEAN : %d %d (%d %d)\n", node->room->objects[0], node->room->objects[1], node->room->position[0], node->room->position[1]);
         }
-        robot_action(map, action);
 
         i = node->room->position[0];
         j = node->room->position[1];

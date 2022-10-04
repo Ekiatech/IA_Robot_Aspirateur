@@ -4,6 +4,8 @@
 #include "robot.h"
 #include "display.h"
 
+#define DEPTH 7
+
 struct node** greedy_best_first_search_depth(struct Map* map, int depth);
 
 void follow_path_greedy(struct Map* map, struct Robot* robot, struct node* q_path[]);
