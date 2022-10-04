@@ -2,6 +2,9 @@
 #define ROBOT_H_
 
 #include "map.h"
+#include "queue_informed_algo.h"
+
+#define DEPTH 7
 
 /************ ENUMs ************/
 
@@ -34,5 +37,9 @@ void pick_up(struct Map * map);
 void move(struct Map * map, Action move);
 
 void robot_action(struct Map * map, Action action);
+
+void test(struct Map * map);
+
+void heuristic(struct Map* map);
 
 #endif // ROBOT_H_

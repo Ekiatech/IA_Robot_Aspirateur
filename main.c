@@ -9,6 +9,7 @@
 #include "map.h"
 #include "queue.h"
 #include "algorithms.h"
+#include "greedy_best_first_search_depth.h"
 
 #define DEFAULT_MAP_SIDE_SIZE 5
 #define DEFAULT_ROBOT_ENERGY 2000
@@ -60,7 +61,30 @@ int main(int argc, char **argv) {
     struct Map * map = create_empty_map(map_side_size, robot);
     init_map(map);
 
-    action_loop(map);
+    for (int i = 0; i < map_side_size; i++){
+        for (int j = 0 ; j < map_side_size; j++)
+            get_neighbors(map, &(map->rooms[i][j]));
+    }
+
+    struct node** path = greedy_best_first_search_depth(map, DEPTH);
+    follow_path_greedy(map, robot, path);
+
+    for (int i = 0; i < DEPTH; i++){
+        printf("%d %d -> ", path[i]->room->position[0], path[i]->room->position[1]);
+    }
+    //show_queue(path);
+
+    for (int i = 0; i < map_side_size; i++){
+        for (int j = 0 ; j < map_side_size; j++){
+            printf("Room : %d %d : voisins : ", i, j);
+            for (int n = 0; n < map->rooms[i][j].nbr_neighbors; n++){
+                printf("(%d, %d) -> %d ", map->rooms[i][j].neighbors[n]->position[0], map->rooms[i][j].neighbors[n]->position[1], map->rooms[i][j].neighbors[n]->heuristic);
+            }
+            printf("\n");
+        }
+    }
+
+    //action_loop(map);
     // test_loop(map);
     
     free_map(map);

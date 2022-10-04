@@ -108,15 +108,6 @@ void robot_action(struct Map * map, Action action) {
     }
 }
 
-void test(struct Map * map){
-    for (int i = 0; i < map->side_size; i++){
-        for (int j = 0; j < map->side_size; j++){
-            printf("(%d, %d) : %d\n", i, j, map->rooms[i][j].objects[0]);
-        }
-    }
-    printf("==============================================\n");
-}
-
 int distance_robot_room(struct Map* map, int x, int y){
     int x_robot = map->robot->position[0];
     int y_robot = map->robot->position[0];
@@ -137,20 +128,7 @@ void heuristic(struct Map* map){
             heuristicTemp = (heuristicTemp < 0) ? 0 : heuristicTemp;
             map->rooms[i][j].heuristic = heuristicTemp;
             
-            printf("(%d, %d) : %d\n", i, j, map->rooms[i][j].heuristic);
+            printf("(%d, %d) : %d | %p\n", i, j, map->rooms[i][j].heuristic, &map->rooms[i][j]);
         }
     }
-}
-
-
-
-void greedy_best_first_search_depth(struct Map* map, int depth){
-    struct queue * q_path = create_empty_queue();
-    struct queue * q_waiting = create_empty_queue();
-
-    int i = map->robot->position[0];
-    int j = map->robot->position[1];
-    struct node * n = create_node(map, i, j);
-
-    push(q_path, n);
 }

@@ -7,14 +7,22 @@ struct node {
     struct node* previous;
     struct node* next;
     int val;
-    struct Room* r;
+    struct Room* room;
+    struct node* add_by_this_node;
 };
 
 struct queue{
     struct node* first;
+    struct node* last;
+    int size;
 };
 
-struct node* create_node(struct Map* map, int x, int y);
+struct queue_path{
+    struct queue* queue;
+    int size;
+};
+
+struct node* create_node(struct Map* map, int x, int y, struct node* node);
 
 struct queue* create_empty_queue_informed();
 
@@ -27,3 +35,5 @@ void free_queue_informed(struct queue* q);
 void show_queue(struct queue* q);
 
 void get_neighbors(struct Map* map, struct Room* room);
+
+struct node* remove_from_queue(struct queue* q, struct node* n);

@@ -16,6 +16,9 @@ struct Robot;
 struct Room {
     int position[2];
     Objects objects[2];
+    int heuristic;
+    struct Room* neighbors[4];
+    int nbr_neighbors;
 };
 
 struct Map {
