@@ -1,5 +1,5 @@
-all: main.o robot.o map.o queue.o algorithms.o display.o queue_informed_algo.o greedy_best_first_search_depth.o
-	gcc -o main main.o robot.o map.o queue.o algorithms.o queue_informed_algo.o greedy_best_first_search_depth.o display.o -pthread -lm -g && make clean_o
+all: robot.o map.o queue.o algorithms.o display.o queue_informed_algo.o greedy_best_first_search_depth.o
+	gcc -o main main.c robot.o map.o queue.o algorithms.o queue_informed_algo.o greedy_best_first_search_depth.o display.o -pthread -lm -g
 
 robot.o: robot.c robot.h
 	gcc -g -Wall -c robot.c

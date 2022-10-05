@@ -6,19 +6,13 @@
 struct node {
     struct node* previous;
     struct node* next;
-    int val;
     struct Room* room;
     struct node* add_by_this_node;
 };
 
-struct queue{
+struct queue {
     struct node* first;
     struct node* last;
-    int size;
-};
-
-struct queue_path{
-    struct queue* queue;
     int size;
 };
 
@@ -33,7 +27,5 @@ struct node pop(struct queue *q);
 void free_queue_informed(struct queue* q);
 
 void show_queue(struct queue* q);
-
-void get_neighbors(struct Map* map, struct Room* room);
 
 struct node* remove_from_queue(struct queue* q, struct node* n);

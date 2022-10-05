@@ -13,7 +13,7 @@
 
 #define DEFAULT_MAP_SIDE_SIZE 5
 #define DEFAULT_ROBOT_ENERGY 2000
-#define DEFAULT_DEPTH 7
+#define DEFAULT_DEPTH 8
 
 void arguments_given(int argc, char* argv[], int* map_side_size, int* robot_energy, int* depth, int* algorithm) {
     int n = 1;
@@ -48,6 +48,7 @@ void action_loop_bfs(struct Map * map) {
     while (map->robot->energy > 0) {
         int best_nb_actions = best_nb_actions_bfs(map);
         printf("Best nb actions before observation = %d\n\n", best_nb_actions);
+        sleep(2);
 
         time_t start = time(NULL);
         time_t seconds = 5;
@@ -63,28 +64,23 @@ void action_loop_bfs(struct Map * map) {
 }
 
 void action_loop_gbfs(struct Map * map, int depth) {
-    for (int i = 0; i < map->side_size; i++){
-        for (int j = 0 ; j < map->side_size; j++)
-            get_neighbors(map, &(map->rooms[i][j]));
-    }
-
-    struct node** path = greedy_best_first_search_depth(map, depth);
-    follow_path_greedy(map, map->robot, path, depth);
-
-    for (int i = 0; i < depth; i++){
-        printf("%d %d -> ", path[i]->room->position[0], path[i]->room->position[1]);
-    }
-    //show_queue(path);
-
-    for (int i = 0; i < map->side_size; i++){
-        for (int j = 0 ; j < map->side_size; j++){
-            printf("Room : %d %d : voisins : ", i, j);
-            for (int n = 0; n < map->rooms[i][j].nbr_neighbors; n++){
-                printf("(%d, %d) -> %d ", map->rooms[i][j].neighbors[n]->position[0], map->rooms[i][j].neighbors[n]->position[1], map->rooms[i][j].neighbors[n]->heuristic);
-            }
-            printf("\n");
+    while (map->robot->energy > 0) {
+        int best_nb_actions = best_gbfs_nb_actions(map, depth);
+        printf("Best nb actions before observation = %d\n\n", best_nb_actions);
+        sleep(5);
+        time_t start = time(NULL);
+        time_t seconds = 5;
+        time_t endwait = start + seconds;
+        
+        while ((start < endwait) && (map->robot->energy > 0)) {
+            struct node** path = greedy_best_first_search_depth(map, depth);
+            follow_path_greedy(map, path, depth, -1);
+            display_map(map);
+            //sleep(5);
+            start = time(NULL);
         }
     }
+
 }
 
 int main(int argc, char **argv) {

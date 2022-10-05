@@ -9,6 +9,9 @@ struct Room create_empty_room(int coordinates[2]) {
     room.position[1] = coordinates[1];
     room.objects[0] = 0;
     room.objects[1] = 0;
+    room.nbr_neighbors = 0;
+    room.neighbors[0] = NULL;
+    room.heuristic = 0;
     return room;
 }
 
@@ -37,6 +40,10 @@ void init_map(struct Map *map) {
         current_y = rand() % map->side_size;
         current_object = choose_dust_or_jewel();
         object_has_been_added += place_object(map, current_x, current_y, current_object, object_has_been_added);
+    }
+    for (int i = 0; i < map->side_size; i++){
+        for (int j = 0 ; j < map->side_size; j++)
+            get_neighbors(map, &(map->rooms[i][j]));
     }
 }
 
@@ -112,4 +119,44 @@ void gen_random_object(struct Map * map) {
         }
     }
     while ((object_has_been_added == 0) && (tested_rooms != total_map_size));
+}
+
+
+void get_neighbors(struct Map* map, struct Room* room){
+    int n = map->side_size;
+    int i = room->position[0];
+    int j = room->position[1];
+    
+    int nbr_neighbors = 0;
+    if (j == 0){
+        room->neighbors[nbr_neighbors] = &map->rooms[i][j+1];
+        nbr_neighbors++;
+    }
+    else if (j == n - 1){
+        room->neighbors[nbr_neighbors] = &map->rooms[i][j-1];
+        nbr_neighbors++;
+    }
+    else{
+        room->neighbors[nbr_neighbors] = &map->rooms[i][j-1];
+        nbr_neighbors++;
+        room->neighbors[nbr_neighbors] = &map->rooms[i][j+1];
+        nbr_neighbors++;
+    }
+
+    if (i == 0){
+        room->neighbors[nbr_neighbors] = &map->rooms[i+1][j];
+        nbr_neighbors++;
+    }
+    else if (i == n - 1){
+        room->neighbors[nbr_neighbors] = &map->rooms[i-1][j];
+        nbr_neighbors++;
+    }
+    else{
+        room->neighbors[nbr_neighbors] = &map->rooms[i-1][j];
+        nbr_neighbors++;
+        room->neighbors[nbr_neighbors] = &map->rooms[i+1][j];
+        nbr_neighbors++;
+    }
+
+    room->nbr_neighbors = nbr_neighbors;
 }

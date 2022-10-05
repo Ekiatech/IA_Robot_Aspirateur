@@ -127,8 +127,6 @@ void heuristic(struct Map* map){
             int heuristicTemp = object1 + object2 - dist;
             heuristicTemp = (heuristicTemp < 0) ? 0 : heuristicTemp;
             map->rooms[i][j].heuristic = heuristicTemp;
-            
-            printf("(%d, %d) : %d | %p\n", i, j, map->rooms[i][j].heuristic, &map->rooms[i][j]);
         }
     }
 }

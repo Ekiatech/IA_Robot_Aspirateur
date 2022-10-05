@@ -2,10 +2,8 @@
 
 struct node* get_best_node(struct queue* q){
     struct node* best_node = q->first;
-    printf("ADRESSE : %p\n", best_node->room);
     int max = best_node->room->heuristic;
     struct node* temp = q->first;
-
     while (temp->next != NULL){
         if (max < temp->next->room->heuristic){
             max = temp->next->room->heuristic;
@@ -44,6 +42,7 @@ void push_the_good_path(struct queue* q_path, struct node* initial_node, struct 
     int i = depth;
     while (i > 0){
         the_good_path[i-1] = n;
+        remove_from_queue(q_path, n);
         n = n->add_by_this_node;
         i--;
     }
@@ -54,8 +53,8 @@ void push_nodes_in_waiting_queue(struct Map* map, struct queue* q_waiting, struc
         if (best_node->room->neighbors[a] != best_node->add_by_this_node->room){
             struct node* temp_node = create_node(map, best_node->room->neighbors[a]->position[0], 
             best_node->room->neighbors[a]->position[1], best_node);
-            push(q_waiting, temp_node);       
-        }        
+            push(q_waiting, temp_node);
+        }
     }
 }
 
@@ -67,8 +66,6 @@ struct node** greedy_best_first_search_depth(struct Map* map, int depth){
     int i = map->robot->position[0];
     int j = map->robot->position[1];
     struct node* initial_node = create_node(map, i, j, NULL);
-
-    //printf("\nROBOT : %d %d | %p\n", i, j, initial_node);
     
     for (int a = 0; a < initial_node->room->nbr_neighbors; a++){
         struct node* temp_node = create_node(map, initial_node->room->neighbors[a]->position[0], 
@@ -91,6 +88,7 @@ struct node** greedy_best_first_search_depth(struct Map* map, int depth){
 
     push_the_good_path(q_path, initial_node, the_good_path, depth);
 
+    free(initial_node);
     free_queue_informed(q_waiting);
     free_queue_informed(q_path);
 
@@ -110,25 +108,76 @@ Action which_side_to_move(int i, int j, struct Room* to){
    return RIGHT;
 }
 
-void follow_path_greedy(struct Map* map, struct Robot* robot, struct node* path[], int depth){
-    int i = robot->position[0];
-    int j = robot->position[1];
+int follow_path_greedy(struct Map* map, struct node* path[], int depth, int limit){
+    int i = map->robot->position[0];
+    int j = map->robot->position[1];
 
     int n = 0;
-    printf("DEPTH : %d\n", depth);
+    int actions = 0;
     while (n < depth){
+        display_map(map);
         struct node* node = path[n];
         Action action = which_side_to_move(i, j, node->room);
         robot_action(map, action);
+        actions++;
+        if (actions == limit)
+            return 1;
 
-        if (node->room->objects[0] == JEWEL || node->room->objects[1] == JEWEL)
+        if (node->room->objects[0] == JEWEL || node->room->objects[1] == JEWEL){
             robot_action(map, PICK_UP);
+            actions++;
+        }
+        if (actions == limit)
+            return 1;
+
         if (node->room->objects[0] == DUST || node->room->objects[1] == DUST){
             robot_action(map, CLEAN);
+            actions++;
         }
+        if (actions == limit)
+            return 1;
+
+        gen_random_object(map);
 
         i = node->room->position[0];
         j = node->room->position[1];
         n++;
     }
+    return 0;
+}
+
+void free_node_tab(struct node** path, int depth){
+    for (int i = 0; i < depth; i++){
+        path[i]->previous = NULL;
+        path[i]->next = NULL;
+        free(path[i]);
+    }
+}
+
+int best_gbfs_nb_actions(struct Map* map, int depth){
+    int stats_sums[MAX_ACTIONS];
+    for (int i = 0; i < MAX_ACTIONS; i++)
+        stats_sums[i] = 0;
+
+    int current_points = 0;
+    for (int i = 1; i <= MAX_ACTIONS; i++) {
+        for (int j = 0; j < NB_LEARNING_LOOPS; j++) {
+            current_points = map->robot->points;
+            struct node** path = greedy_best_first_search_depth(map, depth);
+            follow_path_greedy(map, path, depth, i);
+            free_node_tab(path, depth);
+            stats_sums[i - 1] += (map->robot->points - current_points);
+        }
+    }
+
+    int max = stats_sums[0];
+    int best_nb_actions = 1;
+    for (int i = 1; i < MAX_ACTIONS; i++) {
+        if (stats_sums[i] > max) {
+            max = stats_sums[i];
+            best_nb_actions = i + 1;
+        }
+    }
+
+    return best_nb_actions;
 }

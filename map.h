@@ -47,4 +47,6 @@ int place_object(struct Map * map, int x_room, int y_room, int object, int objec
 
 void gen_random_object(struct Map * map);
 
+void get_neighbors(struct Map* map, struct Room* room);
+
 #endif // MAP_H_
