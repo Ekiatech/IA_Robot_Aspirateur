@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "algorithms.h"
 #include "robot.h"
@@ -114,7 +115,8 @@ void bfs(struct Map * map, int nb_action_btw_update_map) {
             goal_position[0] = n->room->position[0];
             goal_position[1] = n->room->position[1];
         }
-        // display_map_and_queue(map, q);
+        display_map_and_queue(map, q);
+        sleep(1);
     }
 
     selected_path = retrieve_path(n);
@@ -125,18 +127,17 @@ void bfs(struct Map * map, int nb_action_btw_update_map) {
     // Free
     free_node(n);
     free_queue(q);
-    // for (int i = 0; i < (n->length_path + 1); i++)
-    //     free(selected_path[i]);
-    // free(selected_path);
 }
 
 int best_nb_actions_bfs(struct Map * map) {
-    int stats_sums[MAX_DISTANCE - 1];
-    for (int i = 0; i < MAX_DISTANCE; i++)
-        stats_sums[i] = 0;
+    int stats_sums[MAX_NB_ACTIONS - 1];
+    for (int i = 1; i <= MAX_NB_ACTIONS; i++)
+        stats_sums[i - 1] = 0;
 
     int current_points = 0;
-    for (int i = 1; i <= MAX_DISTANCE; i++) {
+    for (int i = 1; i <= MAX_NB_ACTIONS; i++) {
+        printf("Learning stage nb_actions = %d\n", i);
+        sleep(1);
         for (int j = 0; j < NB_LEARNING_LOOPS; j++) {
             current_points = map->robot->points;
             bfs(map, i);
@@ -144,8 +145,13 @@ int best_nb_actions_bfs(struct Map * map) {
         }
     }
 
+    printf("Learning stage results :\n");
+    for (int i = 1; i <= MAX_NB_ACTIONS; i++) {
+        printf("\tnb_actions = %d, points = %d\n", i, stats_sums[i - 1]);
+    }
+
     int max = 0, best_nb_actions = 1;
-    for (int i = 0; i < MAX_DISTANCE; i++) {
+    for (int i = 0; i < MAX_NB_ACTIONS; i++) {
         if (stats_sums[i] > max) {
             max = stats_sums[i];
             best_nb_actions = i + 1;

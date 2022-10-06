@@ -45,22 +45,30 @@ void arguments_given(int argc, char* argv[], int* map_side_size, int* robot_ener
 }
 
 void action_loop_bfs(struct Map * map) {
+    printf("\n\nStart.\n\n");
     while (map->robot->energy > 0) {
+        printf("Start learning stage.\n");
+        sleep(1);
         int best_nb_actions = best_nb_actions_bfs(map);
         printf("Best nb actions before observation = %d\n\n", best_nb_actions);
+        printf("End Learning stage.\n");
         sleep(2);
 
+        printf("Start normal stage.\n");
         time_t start = time(NULL);
-        time_t seconds = 5;
+        time_t seconds = 120;
         time_t endwait = start + seconds;
         
         while ((start < endwait) && (map->robot->energy > 0)) {
+            printf("New bfs call.\n");
             bfs(map, best_nb_actions);
+            sleep(2);
             start = time(NULL);
         }
+        printf("End normal stage.\n");
     }
     
-    printf("End.\n\n");
+    printf("\n\nEnd.\n\n");
 }
 
 void action_loop_gbfs(struct Map * map, int depth) {
@@ -94,9 +102,15 @@ int main(int argc, char **argv) {
     int algorithm = 0;
 
     arguments_given(argc, argv, &map_side_size, &robot_energy, &depth, &algorithm);
-    printf("Paramètres du plateau : \n");
-    printf("Taille cote : %d\nEnergie du robot : %d\n", map_side_size, robot_energy);
-    printf("Profondeur actuelle pour le Greedy Best First Search Algorithme %d\n", depth);
+    printf("\n\n");
+    printf("Platter settings : \n");
+    printf("Side size : %d\nRobot's energy : %d\n", map_side_size, robot_energy);
+    if (algorithm == 0) {
+        printf("Algorithm : Greedy Best First Search\n");
+        printf("Current depth for the Greedy Best First Search algorithm : %d\n", depth);
+    }
+    else if (algorithm == 1)
+        printf("Algorithm : Breadth First Search\n");
 
     time_t t;
     srand((unsigned) time(&t));
