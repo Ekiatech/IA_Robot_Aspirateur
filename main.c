@@ -73,10 +73,14 @@ void action_loop_bfs(struct Map * map) {
 
 void action_loop_gbfs(struct Map * map, int depth) {
     while (map->robot->energy > 0 && (!map_cleaned(map))) {
+        printf("Start learning stage.\n");
+        sleep(1);
         int best_nb_actions = best_gbfs_nb_actions(map, depth);
         printf("Best nb actions before observation = %d\n\n", best_nb_actions);
+        printf("End Learning stage.\n");
         sleep(2);
 
+        printf("Start normal stage.\n");
         time_t start = time(NULL);
         time_t seconds = 100;
         time_t endwait = start + seconds;
@@ -91,7 +95,9 @@ void action_loop_gbfs(struct Map * map, int depth) {
                 follow_path_greedy(map, path, n, best_nb_actions, 0);
             start = time(NULL);
         }
+        printf("End normal stage.\n");
     }
+    printf("\n\nEnd.\n\n");
 }
 
 int main(int argc, char **argv) {
@@ -112,6 +118,7 @@ int main(int argc, char **argv) {
     else if (algorithm == 1)
         printf("Algorithm : Breadth First Search\n");
 
+    sleep(5);
     time_t t;
     srand((unsigned) time(&t));
     int robot_coordinates[2] = { rand() % map_side_size, rand() % map_side_size };

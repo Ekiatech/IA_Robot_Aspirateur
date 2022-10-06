@@ -3,6 +3,7 @@
 
 #include "robot.h"
 #include "display.h"
+#include <unistd.h>
 
 #define MAX_ACTIONS_BEFORE_RECALCULATE 10
 #define NB_LEARNING_LOOPS_ALGO 20
