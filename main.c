@@ -56,7 +56,7 @@ void action_loop_bfs(struct Map * map) {
 
         printf("Start normal stage.\n");
         time_t start = time(NULL);
-        time_t seconds = 15;
+        time_t seconds = 120;
         time_t endwait = start + seconds;
         
         while ((start < endwait) && (map->robot->energy > 0)) {
