@@ -4,7 +4,7 @@
 #include "map.h"
 #include "queue.h"
 
-#define MAX_DISTANCE 8
+#define MAX_NB_ACTIONS 8
 #define NB_LEARNING_LOOPS 20
 
 /************ FCTs ************/
