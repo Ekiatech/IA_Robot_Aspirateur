@@ -36,8 +36,6 @@ void move(struct Map * map, Action move);
 
 void robot_action(struct Map * map, Action action);
 
-void test(struct Map * map);
-
-void heuristic(struct Map* map);
+int distance_robot_room(struct Map* map, int x, int y);
 
 #endif // ROBOT_H_

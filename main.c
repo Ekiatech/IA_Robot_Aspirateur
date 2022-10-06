@@ -64,23 +64,26 @@ void action_loop_bfs(struct Map * map) {
 }
 
 void action_loop_gbfs(struct Map * map, int depth) {
-    while (map->robot->energy > 0) {
+    while (map->robot->energy > 0 && (!map_cleaned(map))) {
         int best_nb_actions = best_gbfs_nb_actions(map, depth);
         printf("Best nb actions before observation = %d\n\n", best_nb_actions);
-        sleep(5);
+        sleep(2);
+
         time_t start = time(NULL);
-        time_t seconds = 5;
+        time_t seconds = 100;
         time_t endwait = start + seconds;
         
-        while ((start < endwait) && (map->robot->energy > 0)) {
+        while ((start < endwait) && (map->robot->energy > 0) && (!map_cleaned(map))) {
             struct node** path = greedy_best_first_search_depth(map, depth);
-            follow_path_greedy(map, path, depth, -1);
-            display_map(map);
-            //sleep(5);
+            int n = 0;
+            for (int i = 0; i < depth; i++)
+                if (path[i] != NULL)
+                    n++;
+            if (path != NULL)
+                follow_path_greedy(map, path, n, best_nb_actions, 0);
             start = time(NULL);
         }
     }
-
 }
 
 int main(int argc, char **argv) {

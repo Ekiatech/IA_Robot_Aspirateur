@@ -160,3 +160,16 @@ void get_neighbors(struct Map* map, struct Room* room){
 
     room->nbr_neighbors = nbr_neighbors;
 }
+
+int map_cleaned(struct Map* map){
+    for (int i = 0; i < map->side_size; i++) {
+        for (int j = 0; j < map->side_size; j++){
+            if (map->rooms[i][j].objects[0] == DUST
+                || map->rooms[i][j].objects[0] == JEWEL
+                || map->rooms[i][j].objects[1] == DUST
+                || map->rooms[i][j].objects[1] == JEWEL)
+                return 0; 
+        }
+    }
+    return 1;
+}

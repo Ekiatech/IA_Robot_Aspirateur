@@ -107,7 +107,8 @@ void show_queue(struct queue* q){
     struct node* temp = q->first;
     if (temp != NULL){
         while (temp != NULL){
-            printf("%p (%d %d)| ADD BY : %p\n", temp, temp->room->position[0], temp->room->position[1], temp->add_by_this_node);
+            printf("%p %p -> (%d %d)| ADD BY : %p : %p -> %d %d\n", temp, temp->room, temp->room->position[0], temp->room->position[1], 
+            temp->add_by_this_node, temp->add_by_this_node->room, temp->add_by_this_node->room->position[0], temp->add_by_this_node->room->position[1]);
             temp = temp->next;
         }
     }

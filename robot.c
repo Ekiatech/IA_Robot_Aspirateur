@@ -115,18 +115,3 @@ int distance_robot_room(struct Map* map, int x, int y){
     int y_dist = (y > y_robot) ? y - y_robot : y_robot - y;
     return x_dist + y_dist;
 }
-
-void heuristic(struct Map* map){
-    for (int i = 0; i < map->side_size; i++){
-        for (int j = 0; j < map->side_size; j++){
-            int object1 = map->rooms[i][j].objects[0];
-            object1 = (object1 == DUST) ? object1 * 10 : object1 * 5; 
-            int object2 = map->rooms[i][j].objects[1];
-            object2 = (object2 == DUST) ? object2 * 10 : object2 * 5; 
-            int dist = distance_robot_room(map, i, j);
-            int heuristicTemp = object1 + object2 - dist;
-            heuristicTemp = (heuristicTemp < 0) ? 0 : heuristicTemp;
-            map->rooms[i][j].heuristic = heuristicTemp;
-        }
-    }
-}

@@ -49,4 +49,6 @@ void gen_random_object(struct Map * map);
 
 void get_neighbors(struct Map* map, struct Room* room);
 
+int map_cleaned(struct Map* map);
+
 #endif // MAP_H_
